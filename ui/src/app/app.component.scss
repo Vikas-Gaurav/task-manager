@@ -1,0 +1,45 @@
+.app-header{
+    height: 50px;
+    .logo{
+        font-size: 1.5em;
+        font-weight: 800;
+    }
+}
+.modal{
+    background-color: rgba(20,20,20,0.5);
+}
+.user-profile{
+    .user-image{
+        height: 2.5em;
+        width: 2.5em;
+    }
+    [contentEditable]{
+        outline: 1px solid royalblue;
+    }
+}
+.close-btn{
+    font-weight: 800;
+    font-size: 1.5em;
+    &:hover{
+        color: red;
+    }
+}
+//utility classes
+.cursor-pointer{
+    cursor: pointer;
+}
+.cursor-move{
+    cursor:move;
+}
+.font-semibold{
+    font-weight: 600;
+}
+.font-bold{
+    font-weight: 800;
+}
+.hover-shadow{
+    &:hover{
+        box-shadow: 0 0 10px gray;
+    }
+}
+

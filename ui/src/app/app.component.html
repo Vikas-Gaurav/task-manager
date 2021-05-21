@@ -1,0 +1,84 @@
+<div class="app-container">
+  <!--The app header-->
+  <div class="app-header sticky-top shadow d-flex align-items-center text-white">
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="logo px-3">Tasker</div>
+    </div>
+  </div>
+
+  <!-- User task boards -->
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center py-2">
+      <h5 class="text-white">Manage users and tasks</h5>
+      <button (click)="showModal('ADD_USER')" class="btn btn-success">+ Add User</button>
+    </div>
+    <!-- user task board cards -->
+    <div *ngIf="users && users.length >0" class="row">
+      <div *ngFor="let user of users; index as userIndex_" class="col-12 col-md-4 my-2">
+        <div class="task-board bg-white h-100 shadow-sm d-flex flex-column border rounded overflow-hidden"
+          [attr.id]="'card_'+userIndex_" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <!-- task board header -->
+          <div class="task-board-header bg-light border-bottom d-flex justify-content-between">
+            <div class="user-profile d-flex align-items-center p-2">
+              <div class="user-image rounded-circle border"><img src="../assets/images/user.png" alt="" class="img-fluid"></div>
+              <div class="user-name ml-3 font-semibold py-2 px-3" contentEditable="true">{{user.name}}</div>
+            </div>
+            <div (click)="showModal('DELETE_USER')" class="close-btn cursor-pointer p-2" title="Delete user">&times;</div>
+          </div>
+          <!-- task list -->
+          <div *ngIf="user && user.taskList && user.taskList.length > 0" class="task-list p-2">
+            <div *ngFor="let task of user.taskList; index as listIndex_" 
+              class="list-item border rounded bg-light hover-shadow cursor-move p-2 mb-2" 
+              [attr.id]="'draggabe_'+userIndex_+'_'+listIndex_" 
+              [innerHtml]="task">
+            </div>
+          </div>
+          <!-- button for adding task -->
+          <div class="mt-auto px-2 py-2 text-center">
+            <button (click)="showModal('ADD_TASK')" class="btn btn-sm btn-success text-white">+ Add task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--dynamic modal box -->
+  <div *ngIf="modalData" [ngClass]="{'modal fade':true,'show':isModal}" [ngStyle]="{'display' : isModal? 'block': 'none'}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header py-2 bg-light d-flex">
+          <h5 *ngIf="modalData.headerTitle" class="modal-title" [innerHtml]="modalData.headerTitle">Add user</h5>
+          <div class="close-btn cursor-pointer" (click)="closeModal()">&times;</div>
+        </div>
+        <div class="modal-body">
+          <!-- modal text -->
+          <div *ngIf="modalData.bodyText" class="title" [innerHtml]="modalData.bodyText"></div>
+          <div *ngIf="modalData.input" class="form-group">
+            <label *ngIf="modalData.input.lable" class="col-form-label" [innerHtml]="modalData.input.lable"></label>
+            <input type ="text" class="form-control" [placeholder]="modalData.input.placeholder" id="message-text">
+          </div>
+          <div class="btns text-right">
+            <button *ngIf="modalData.submitBtnText" type="submit" (click)="closeModal()"
+              [ngClass]="['btn mt-2', modalData.submitBtnText.includes('Delete')?'btn-danger': 'btn-success']">{{modalData.submitBtnText}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!users || users.length === 0" class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 offset-md-3 text-center">
+        <div class="empty-state-image text-center">
+            <img src="../assets/images/user.png" alt="" class="img-fluid">
+        </div>
+        <h3>You do not have any taskboard yet!</h3>
+        <p class="text-muted">Start by adding a user.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
