@@ -13,9 +13,6 @@
         height: 2.5em;
         width: 2.5em;
     }
-    [contentEditable]{
-        outline: 1px solid royalblue;
-    }
 }
 .close-btn{
     font-weight: 800;
@@ -23,6 +20,10 @@
     &:hover{
         color: red;
     }
+}
+.task-btn{
+    height: 2em;
+    width: 2em;
 }
 //utility classes
 .cursor-pointer{
