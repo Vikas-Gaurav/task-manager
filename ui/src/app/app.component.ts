@@ -98,13 +98,39 @@ export class AppComponent implements OnInit {
   * This method is called on change in user name
   * This method updates the user name, using debouncing, to limit the API call
   */
-  public onNameChange(name_: string, user_: IUser) {
+  public onUserNameChange(name_: string, user_: IUser) {
     console.log(`AppComponent :: onNameChange :: updated name: ${name_}`);
     this._cancel$.next();
     if (name_ && name_.length > 0) {
       this.currentUserId = user_._id;
       const updatedUser_: IUser = {
         name: name_,
+        taskList: user_.taskList
+      };
+
+      // debouncing, this waits for 1000ms before calling update API
+      // if user change name field in-between, timer gets resetted 
+      observableTimer(1000).pipe(mergeMap(() => {
+        return this.appService.updateUser(this.currentUserId, updatedUser_);
+      }), takeUntil(this._cancel$)).subscribe((res_) => {
+        console.log(`AppComponent :: onNameChange :: update API responce:`, res_);
+      });
+    }
+  }
+
+
+  /*
+  * This method is called on change in user name
+  * This method updates the user name, using debouncing, to limit the API call
+  */
+  public onTaskNameChange(updatedListItemName_: string,itemIndex_: number, user_: IUser) {
+    this._cancel$.next();
+    user_.taskList[itemIndex_] = updatedListItemName_;
+    console.log(`AppComponent :: onNameChange :: updated tasklist:`, user_.taskList);
+    if (updatedListItemName_ && updatedListItemName_.length > 0) {
+      this.currentUserId = user_._id;
+      const updatedUser_: IUser = {
+        name: user_.name,
         taskList: user_.taskList
       };
 

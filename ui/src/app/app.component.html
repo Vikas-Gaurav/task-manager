@@ -22,18 +22,20 @@
             <div class="user-profile d-flex align-items-center p-2">
               <div class="user-image rounded-circle border"><img src="../assets/images/user.png" alt="" class="img-fluid"></div>
               <div class="user-name ml-3 font-semibold py-2 px-3" contentEditable="true" 
-              (input)="onNameChange($event.target.innerHTML,user)" [innerHtml]="user.name"></div>
+              (input)="onUserNameChange($event.target.innerHTML,user)" [innerHtml]="user.name"></div>
             </div>
             <div (click)="showModal('DELETE_USER', user._id)" class="close-btn cursor-pointer p-2" title="Delete user">&times;</div>
           </div>
-
           <!-- task list container, using cdk drag drop-->
           <div *ngIf="user && user.taskList" class="task-list-container flex-fill p-2" 
             [attr.ariaLabel]="user.name" [attr.accessKey]="user.name"
             cdkDropList id={{user._id}} [cdkDropListData]="user.taskList"
             [cdkDropListConnectedTo]="connectedTo" (cdkDropListDropped)="drop($event)">
-              <div class="list-item border rounded bg-light hover-shadow cursor-move p-2 mb-2" 
-                *ngFor="let task of user.taskList; index as listIndex_" cdkDrag [innerHtml]="task">
+              <div cdkDrag class="list-item border d-flex rounded bg-light hover-shadow  p-2 mb-2" 
+                *ngFor="let task of user.taskList; index as listIndex_">
+                <div class="dragger d-flex justify-content-center align-items-center px-2 fa fa-ellipsis-vertical cursor-move"></div>
+                <div class="task-name px-2 flex-fill" [innerHtml]="task" (mousedown)="$event.stopPropagation()"
+                contentEditable="true" (input)="onTaskNameChange($event.target.innerHTML,listIndex_,user)"></div>
               </div>
           </div>          
           <!-- button for adding task -->
